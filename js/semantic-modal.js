@@ -7,6 +7,24 @@
     if(typeof $ !== "undefined") {
         if(typeof $.fn.modal !== "undefined") {
             var _makeModal = function(settings) {
+                if(typeof settings === "undefined" ||
+                          settings == {} ||
+                          settings == "")
+                    throw "Undefined options to modal";
+
+                settings = $.extend({
+                    title: "Modal Title",
+                    size: "normal",
+                    closable: true,
+                    allowMultiple: true,
+                    callback: function(result) {},
+                    buttons: {
+                        "Ok": { "class": "ui primary button", "action": function($modal) {
+                            $modal.modal('hide');
+                        } }
+                    }
+                }, (typeof settings === "object" ? settings : { message: settings }));
+
                 var _instance = $("<div/>", {
                     "id": "semantic-modal-instance-" + $(".ui.modal.semantic-modal").length+1,
                     "class": "ui modal semantic-modal"
@@ -19,7 +37,7 @@
 
                 // Close button
                 if(settings.closable) {
-                    _instance.append($("<i/>", { "class": "close" }));
+                    _instance.append($("<i/>", { "class": "icon close" }));
                 }
 
                 // Modal header
@@ -59,15 +77,17 @@
                 else if(typeof settings.message === "function") {
                     _contentModal = settings.message.call();
                 }
-                else
-                    _contentModal = "";
+
                 _instance.append($("<div/>", {
                     "class": "content" ,
                     "html": _contentModal
                 }));
 
+                _instance.settings = settings;
+
                 // Modal buttons
-                if(typeof settings.buttons !== "undefined" && settings.buttons.length) {
+                if(typeof settings.buttons === "object") {
+                    //console.log(settings.buttons);
                     var _modalFooter = $("<div/>", { "class": "actions" });
                     $.each(settings.buttons, function(indexLabel) {
                         var _button = $("<button/>", {
@@ -79,9 +99,10 @@
                             _button.append($("<i/>", { "class": this.icon }));
                         }
 
+                        //console.log(this);
                         if(typeof this.action === "function") {
                             _button.on("click", function() {
-                                this.action(_instance);
+                                settings.buttons[indexLabel].action(_instance);
                             });
                         }
                         _modalFooter.append(_button);
@@ -96,29 +117,23 @@
                 _modal: null,
 
                 alert: function(message) {
-                    this._modal = _makeModal({
-                        title: "Alert",
-                        message: message,
-                        buttons: {
-                            "Ok": { "class": "primary", "action": function($dialog) { $dialog.modal('hide'); } }
-                        }
-                    });
+                    this._modal = _makeModal(message);
                     this._modal.modal('show');
                     return this;
                 },
 
-                confirm: function(message) {
+                confirm: function(settings) {
                     this._modal = _makeModal({
-                        title: "Confirm",
-                        message: message,
-                        callback: function(result) {},
+                        message: (typeof settings === "string" ? message : settings.message),
+                        callback: (typeof settings === "object" ? settings.callback : function(value) {}),
+                        title: (typeof settings === "object" ? settings.title : "Modal Title"),
                         buttons: {
                             "Ok": { "class": "primary", "action": function($dialog) {
-                                this.callback(true);
+                                $dialog.settings.callback(true);
                                 $dialog.modal('hide');
                             } },
                             "Cancel": { "class": "red", "action": function($dialog) {
-                                this.callback(false);
+                                $dialog.settings.callback(false);
                                 $dialog.modal('hide');
                             } }
                         }
@@ -127,26 +142,30 @@
                     return this;
                 },
 
-                prompt: function(message) {
+                prompt: function(settings) {
                     this._modal = _makeModal({
-                        title: "Prompt",
+                        callback: (typeof settings === "object" ? settings.callback : function(value) {}),
+                        title: (typeof settings === "object" ? settings.title : "Modal Title"),
                         message: function() {
                             return $("<div/>", {
                                 "class": "ui one column grid container"
                             }).append(
-                                $("<p/>", { "text": "Enter a value", "class": "column" })
+                                $("<p/>", { "text": (typeof settings === "string" ? settings : "Enter a value"), "class": "column", "style": "margin-bottom: 0;" })
                             ).append(
-                                $("<input/>", { "class": "prompt-input", "autofocus": true, "placeholder": "Enter a value" })
+                                $("<div/>", { "class": "column" }).append(
+                                    $("<div/>", { "class": "ui fluid input" }).append(
+                                        $("<input/>", { "class": "prompt-input", "autofocus": true, "placeholder": "Enter a value" })
+                                    )
+                                )
                             );
                         },
-                        callback: function(result) {},
                         buttons: {
                             "Ok": { "class": "primary", "action": function($dialog) {
-                                this.callback($dialog.find("input.prompt-input").val());
+                                $dialog.settings.callback($dialog.find("input.prompt-input").val());
                                 $dialog.modal('hide');
                             } },
                             "Cancel": { "class": "red", "action": function($dialog) {
-                                this.callback("");
+                                $dialog.settings.callback("");
                                 $dialog.modal('hide');
                             } }
                         }
@@ -161,142 +180,6 @@
                     return this;
                 }
             };
-
-            // window.semanticModal = function(modalType, options) {
-            //     var _DEFAULT_OPTIONS = {
-            //         allowMultiple: true,
-            //         autofocus: false,
-            //         closable: true,
-            //         duration: 200,
-            //         blurring: true,
-            //         header: "Modal Title",
-            //         buttons: {
-            //             "Ok": {
-            //                 icon: false,
-            //                 className: "primary",
-            //                 action: function($modal) {
-            //                     console.log("primary click");
-            //                     $modal.modal('hide');
-            //                 }
-            //             },
-            //
-            //             "Cancel": {
-            //                 icon: false,
-            //                 className: "red",
-            //                 action: function($modal) {
-            //                     console.log("cancel click");
-            //                     $modal.modal('hide');
-            //                 }
-            //             }
-            //         }
-            //     },
-            //
-            //     _SETTINGS = $.extend(_DEFAULT_OPTIONS, options),
-            //
-            //     _MODAL_TYPES = ["alert", "dialog", "confirm", "prompt"];
-            //
-            //
-            //
-            //     if(_MODAL_TYPES[modalType] != "undefined") {
-            //         if(modalType == "alert" ||
-            //             modalType == "prompt" ||
-            //             modalType == "confirm") {
-            //                 if(typeof options !== "string" || $.trim(options) == "") {
-            //                     throw "Undefined or invalid message for dialog";
-            //                 }
-            //             }
-            //
-            //         var _instance = null;
-            //         switch (modalType) {
-            //             case "confirm":
-            //                 _instance = _makeModal({
-            //                     message: function() {
-            //                         return $("<div/>", {
-            //                             "class": "ui one column grid container"
-            //                         }).append(
-            //                             $("<p/>", { "text": "Enter a value", "class": "column" })
-            //                         );
-            //                     },
-            //                     buttons: {
-            //                         "Ok": {
-            //                             action: function($modal) {
-            //                                 $modal.hide();
-            //                                 return true;
-            //                             }
-            //                         },
-            //                         "Cancel": {
-            //                             action: function($modal) {
-            //                                 $modal.hide();
-            //                                 return false;
-            //                             }
-            //                         }
-            //                     }
-            //                 });
-            //                 break;
-            //
-            //             case "prompt":
-            //                 _instance = _makeModal({
-            //                     message: function() {
-                                    // return $("<div/>", {
-                                    //     "class": "ui one column grid container"
-                                    // }).append(
-                                    //     $("<p/>", { "text": "Enter a value", "class": "column" })
-                                    // ).append(
-                                    //     $("<input/>", { "class": "prompt-input", "autofocus": true, "placeholder": "Enter a value" })
-                                    // );
-            //                     },
-            //                     buttons: {
-            //                         "Ok": {
-            //                             action: function($modal) {
-            //                                 $modal.hide();
-            //                                 return $modal.find("input.prompt-input").val();
-            //                             }
-            //                         },
-            //                         "Cancel": _SETTINGS.buttons["Cancel"],
-            //                     }
-            //                 });
-            //                 break;
-            //
-            //             case "dialog":
-            //                 _instance = _makeModal(_SETTINGS);
-            //                 break;
-            //
-            //             default:
-            //                 _instance = _makeModal({
-            //                     message: function() {
-            //                         return $("<div/>", {
-            //                             "class": "ui one column grid container"
-            //                         }).append(
-            //                             $("<p/>", { "text": "Enter a value", "class": "column" })
-            //                         );
-            //                     },
-            //                     buttons: {
-            //                         "Ok": _SETTINGS.buttons["Ok"]
-            //                     }
-            //                 });
-            //                 break;
-            //         }
-            //
-            //         $("body").append(_instance);
-            //
-            //         return {
-            //             show: function() {
-            //                 _instance.modal('show');
-            //             },
-            //
-            //             hide: function() {
-            //                 _instance.modal('hide');
-            //             },
-            //
-            //             alert: function(options) {
-            //                 return _makeModal();
-            //             }
-            //         };
-            //     }
-            //     else {
-            //         throw "Invalid dialog type, dialogs types: " + _MODAL_TYPES;
-            //     }
-            // };
         }
         else {
             throw "Semantic Modal component is not defined";
