@@ -2,7 +2,6 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
-    es = require('event-stream'),
     jshint = require('gulp-jshint'),
     cleanCSS = require('gulp-clean-css');
 
@@ -20,14 +19,7 @@ gulp.task('jshint', function() {
 //Requiring 'clean' task before 'uglify' task
 gulp.task('uglify', ['clean'], function() {
     //Concat sources
-    return es.merge([
-        gulp.src([
-            'lib/jquery/dist/jquery.min.js',
-            'lib/jquery/dist/jquery.slim.min.js',
-            'lib/semantic/dist/**/*.*'
-        ]),
-        gulp.src('js/**/*.js').pipe(uglify())
-    ])
+    return gulp.src('js/**/*.js').pipe(uglify())
         //'.dest' -> Node API of Stream, simply move files do destiny
         .pipe(gulp.dest('dist/js'));
 });
