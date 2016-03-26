@@ -67,6 +67,7 @@
                         "class": "header",
                         "text": (typeof settings.title === "string" ? settings.title : "Modal title")
                     }).css("background-color", _backGroundColorModalHeader)
+                        .css("color", (_backGroundColorModalHeader != "#ffffff" ? "white" : "black"))
                 );
 
                 // Modal content
@@ -118,7 +119,9 @@
 
                 alert: function(message) {
                     this._modal = _makeModal(message);
-                    this._modal.modal('show');
+                    this._modal
+                        .modal('setting', 'closable', this._modal.settings.closable)
+                        .modal('show');
                     return this;
                 },
 
@@ -128,17 +131,19 @@
                         callback: (typeof settings === "object" ? settings.callback : function(value) {}),
                         title: (typeof settings === "object" ? settings.title : "Modal Title"),
                         buttons: {
-                            "Ok": { "class": "primary", "action": function($dialog) {
+                            "Ok": { "className": "primary", "action": function($dialog) {
                                 $dialog.settings.callback(true);
                                 $dialog.modal('hide');
                             } },
-                            "Cancel": { "class": "red", "action": function($dialog) {
+                            "Cancel": { "className": "red", "action": function($dialog) {
                                 $dialog.settings.callback(false);
                                 $dialog.modal('hide');
                             } }
                         }
                     });
-                    this._modal.modal('show');
+                    this._modal
+                        .modal('setting', 'closable', this._modal.settings.closable)
+                        .modal('show');
                     return this;
                 },
 
@@ -160,23 +165,27 @@
                             );
                         },
                         buttons: {
-                            "Ok": { "class": "primary", "action": function($dialog) {
+                            "Ok": { "className": "primary", "action": function($dialog) {
                                 $dialog.settings.callback($dialog.find("input.prompt-input").val());
                                 $dialog.modal('hide');
                             } },
-                            "Cancel": { "class": "red", "action": function($dialog) {
+                            "Cancel": { "className": "red", "action": function($dialog) {
                                 $dialog.settings.callback("");
                                 $dialog.modal('hide');
                             } }
                         }
                     });
-                    this._modal.modal('show');
+                    this._modal
+                        .modal('setting', 'closable', this._modal.settings.closable)
+                        .modal('show');
                     return this;
                 },
 
                 dialog: function(settings) {
                     this._modal = _makeModal(settings);
-                    this._modal.modal('show');
+                    this._modal
+                        .modal('setting', 'closable', this._modal.settings.closable)
+                        .modal('show');
                     return this;
                 }
             };

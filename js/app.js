@@ -2,7 +2,7 @@
  * Simple demo
  */
 $(function() {
-    $("button.alert").on("click", function() {
+    $("button.alert, button.closable").on("click", function() {
         semanticModal.alert({
             title: "Alert - Modal Title",
             message: "This is a simple modal alert",
@@ -52,6 +52,22 @@ $(function() {
                     }
                 }
             }
+        });
+    });
+
+    $("button.not-closable").on("click", function() {
+        semanticModal.alert({
+            title: "Modal title",
+            message: "A modal not closable",
+            closable: false
+        });
+    });
+
+    $("button.modal-type").on("click", function() {
+        semanticModal.alert({
+            title: "Modal title",
+            message: "A modal not closable",
+            type: $(this).data("type")
         });
     });
 });

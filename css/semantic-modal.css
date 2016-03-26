@@ -1,0 +1,7 @@
+/**
+    Semantic Modal CSS
+    version: 1.0.0
+**/
+.ui.modal.semantic-modal div.header {
+    text-align: center;
+}

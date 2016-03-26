@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" href="lib/semantic/dist/semantic.min.css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="css/semantic-modal.css" media="screen" title="no title" charset="utf-8">
         <style media="screen">
             .ui.header { padding-top: 15px; padding-bottom: 15px; }
             #wrap-content { padding-top: 50px; }
@@ -32,6 +33,46 @@
 
                     <div class="column">
                         <button class="ui fluid button dialog">Dialog</button>
+                    </div>
+                </div>
+            </div>
+
+            <h1 class="ui center aligned header">Closable and non-closable modal</h1>
+
+            <div class="ui text grid container center aligned">
+                <div class="row four column">
+                    <div class="two column">
+                        <button class="ui fluid button closable">Closable</button>
+                    </div>
+
+                    <div class="two column">
+                        <button class="ui fluid button not-closable">Not closable</button>
+                    </div>
+                </div>
+            </div>
+
+            <h1 class="ui center aligned header">Modal type</h1>
+
+            <div class="ui text grid container center aligned">
+                <div class="row five column">
+                    <div class="column">
+                        <button class="ui fluid button modal-type" data-type="default">Default</button>
+                    </div>
+
+                    <div class="column">
+                        <button class="ui blue fluid button modal-type" data-type="info">Info</button>
+                    </div>
+
+                    <div class="column">
+                        <button class="ui yellow fluid button modal-type" data-type="warning">Warning</button>
+                    </div>
+
+                    <div class="column">
+                        <button class="ui positive fluid button modal-type" data-type="success">Success</button>
+                    </div>
+
+                    <div class="column">
+                        <button class="ui negative fluid button modal-type" data-type="danger">Danger</button>
                     </div>
                 </div>
             </div>
