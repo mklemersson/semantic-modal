@@ -1,4 +1,5 @@
 /**
+    @license MIT license
     @author Michael michaelklemersson10@gmail.com
     @version: 1.0.0
 **/
