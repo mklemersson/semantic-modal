@@ -9,7 +9,7 @@
             var _makeModal = function(settings) {
                 if(typeof settings === "undefined" ||
                           settings == {} ||
-                          settings == "")
+                          settings === "")
                     throw "Undefined options to modal";
 
                 settings = $.extend({
@@ -32,11 +32,11 @@
 
                 // Modal size
                 if(typeof settings.size !== "undefined" && $.inArray(settings.size, ["small", "normal", "large"]) > -1) {
-
+                    _instance.addClass(settings.size);
                 }
 
                 // Close button
-                if(settings.closable) {
+                if(typeof settings.closable === true) {
                     _instance.append($("<i/>", { "class": "icon close" }));
                 }
 
@@ -114,7 +114,7 @@
                 return _instance;
             };
 
-            return window.semanticModal = {
+            window.semanticModal = {
                 _modal: null,
 
                 alert: function(message) {

@@ -36,7 +36,7 @@ $(function() {
         semanticModal.dialog({
             title: "Custom Dialog - Modal Title",
             message: function() {
-                return "Message passed by a function"
+                return "Message passed by a function";
             },
             buttons: {
                 "Nice": {

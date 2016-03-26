@@ -3,7 +3,6 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
     es = require('event-stream'),
-    htmlmin = require('gulp-htmlmin'),
     jshint = require('gulp-jshint'),
     cleanCSS = require('gulp-clean-css');
 
@@ -13,42 +12,33 @@ gulp.task('clean', function() {
 
 //Tasks maybe have dependencies
 gulp.task('jshint', function() {
-    console.log("Verfying quality of JS code...");
-    return gulp.src('js/**/*.js') //'.src' -> Define where files are
+    return gulp.src(['js/**/*.js', 'app.js']) //'.src' -> Define where files are
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
 
 //Requiring 'clean' task before 'uglify' task
 gulp.task('uglify', ['clean'], function() {
-    console.log('Minifing JS files...');
-    /*
     //Concat sources
     return es.merge([
-        gulp.src(''),
-        gulp.src('')
+        gulp.src([
+            'lib/jquery/dist/jquery.min.js',
+            'lib/jquery/dist/jquery.slim.min.js',
+            'lib/semantic/dist/**/*.*'
+        ]),
+        gulp.src('js/**/*.js').pipe(uglify())
     ])
-    */
-
-    //'.dest' -> Node API of Stream, simply move files do destiny
-    return gulp.src(['js/**/*.js', 'lib/**/*.js'])
-                .pipe(uglify())
-                .pipe(gulp.dest('dist/js'));
+        //'.dest' -> Node API of Stream, simply move files do destiny
+        .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('htmlmin', function() {
-    return gulp.src('view/*.html')
-                .pipe(htmlmin({ collapseWhiteSpace: true }))
-                .pipe(gulp.dest('dist/view'));
-});
-
-gulp.task('cleacnCSS', function() {
+gulp.task('cleanCSS', ['clean'], function() {
     return gulp.src([
-                    'lib/',
-                    'css/**/*.css'
-                ])
-                .pipe(htmlmin({ collapseWhiteSpace: true }))
-                .pipe(gulp.dest('dist/view'));
+        'css/**/*.css'
+    ])
+    .pipe(cleanCSS())
+    .pipe(concat('styles.min.css'))
+    .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('default', ['jshint', 'uglify', 'htmlmin']);
+gulp.task('default', ['jshint', 'uglify', 'cleanCSS']);
