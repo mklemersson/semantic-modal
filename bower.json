@@ -1,0 +1,27 @@
+{
+  "name": "semantic-modal",
+  "authors": [
+    "Michael Klemersson <michaelklemersson10@gmail.com>"
+  ],
+  "description": "simple modals for SemanticUI",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "semantic-modal"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.5.0"
+  },
+  "devDependencies": {
+    "semantic": "~2.0.0"
+  }
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Base Angular + SemanticUI App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="lib/semantic/dist/semantic.min.css" media="screen" title="no title" charset="utf-8">
+        <style media="screen">
+            .ui.header { padding-top: 15px; padding-bottom: 15px; }
+            #wrap-content { padding-top: 50px; }
+        </style>
+    </head>
+
+    <body>
+        <div id="wrap-content">
+            <h1 class="ui center aligned header">Simple Contatcs APP</h1>
+
+            <div class="ui text grid container">
+                <div class="row">
+                    <table class="ui basic celled table">
+                        <thead>
+                            <th class="one wide center aligned">#</th>
+                            <th>Name</th>
+                            <th class="five wide column">E-mail</th>
+                            <th class="four wide column">Phone</th>
+                            <th class="two wide column center aligned"></th>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="four column row centered stackable">
+                    <div class="column center aligned">
+                        <button disabled class="ui fluid inverted red button" type="button" name="button">Remover</button>
+                    </div>
+
+                    <div class="column center aligned">
+                        <button class="ui fluid primary icon button" type="button" name="button">
+                            <i class="icon plus"></i> Adicionar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="lib/jquery/dist/jquery.min.js" charset="utf-8"></script>
+        <script src="lib/semantic/dist/semantic.min.js" charset="utf-8"></script>
+        <script src="js/semantic-modal.js" charset="utf-8"></script>
+        <script charset="utf-8">
+        $(function() {
+            console.log("jQuery working");
+            var alertInstance = semanticModal.alert({
+                title: "Test",
+                message: "Alert test",
+                type: "danger"
+            });
+            console.log(alertInstance);
+        });
+        </script>
+        <!-- <script src="/lib/angular/angular.min.js" charset="utf-8"></script> -->
+    </body>
+</html>
